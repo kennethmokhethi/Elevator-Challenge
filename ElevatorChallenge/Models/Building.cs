@@ -30,14 +30,17 @@ namespace ElevatorChallenge.Models
         public void CallElevator(int floor, int peopleWaiting)
         {
             var nearestElevator = Elevators.OrderBy(e => Math.Abs(e.CurrentFloor - floor)).FirstOrDefault();
-            nearestElevator?.MoveToFloor(floor);
-            nearestElevator?.AddPeople(peopleWaiting);
-        }
 
-        public void SetPeopleWaiting(int floor, int peopleCount)
-        {
-            // In this simple implementation, we just call the nearest elevator
-            CallElevator(floor, peopleCount);
+            if (nearestElevator != null)
+            {
+                nearestElevator.MoveToFloor(floor);
+
+                Console.Write($"Elevator {nearestElevator.Id} has arrived at floor {floor}. How many people are getting off? ");
+                int peopleGettingOff = int.Parse(Console.ReadLine());
+                nearestElevator.RemovePeople(peopleGettingOff);
+
+                nearestElevator.AddPeople(peopleWaiting);
+            }
         }
     }
 }
